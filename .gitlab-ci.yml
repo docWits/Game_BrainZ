@@ -1,0 +1,37 @@
+variables:
+  NUGET_PATH: 'C:\NuGet\nuget.exe'
+  MSBUILD_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MSBuild.exe'
+  NUNIT_PATH: 'C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe'
+  INNO_PATH: 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+  SONARQUBE_SCRIPT_PATH: 'C:\Program Files\sonarqube\sonarqube-brainz.cmd'
+  JAVA_HOME: 'C:\Program Files\Java\jre-11.0.10.9-1'
+
+# https://stackoverflow.com/questions/49295637/encoding-locale-of-gitlab-runner-machine
+default:
+  before_script:
+    - CHCP 65001
+
+stages:
+  - build
+  - analyze
+
+build_job:
+  stage: build
+  script:
+    - echo "Restore Nuget"
+    - '& "$env:NUGET_PATH" restore'  # restore Nuget dependencies
+    - echo "Compile sources"
+    - '& "$env:MSBUILD_PATH" /p:Configuration=Release'  # build the project        
+  artifacts:
+    expire_in: 1 week  # save gitlab server space, we copy the files we need to deploy folder later on
+    paths:
+      - 'SampleForm\bin\Release\'
+
+analyze_job:
+  stage: analyze  
+  script:
+    - echo "Restore Nuget"
+    - '& "$env:NUGET_PATH" restore'
+    - '& "$env:SONARQUBE_SCRIPT_PATH"'
+  dependencies:
+    - build_job

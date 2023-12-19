@@ -1,0 +1,53 @@
+﻿<Window x:Class="WpfGameApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfGameApp"
+        mc:Ignorable="d"
+        Title="Построй свой ЦОД" Height="450" Width="800" WindowStartupLocation="CenterScreen" WindowState="Maximized" Loaded="Window_Loaded">
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Игра">
+                <MenuItem Header="Новая"></MenuItem>
+                <MenuItem x:Name="load" Header="Загрузить..." Click="load_Click"></MenuItem>
+                <MenuItem x:Name="save" Header="Сохранить..." Click="save_Click"></MenuItem>
+                <MenuItem Header="Выход"  Click="MenuItem_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Соревнование">
+                <MenuItem Header="Старт" Click="start_Click"></MenuItem>
+                <MenuItem Header="Стоп" Click="stop_Click"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Canvas x:Name="canvas" DockPanel.Dock="Left">
+            <Rectangle x:Name="rack" Height="750" Canvas.Left="10" Canvas.Top="10" Width="280" Stroke="Black" Fill="DarkGray"/>
+            <TextBlock x:Name="price" Canvas.Left="660" TextWrapping="Wrap" Text="-" Canvas.Top="50"/>
+            <TextBlock x:Name="capacity" Canvas.Left="660" TextWrapping="Wrap" Text="-" Canvas.Top="100" >
+                <TextBlock.Style >
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <DataGrid Canvas.Left="320" Canvas.Top="600" x:Name="calc"
+                      IsReadOnly="True"
+                      SelectionMode="Single"
+                      AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Name}" IsReadOnly="True" />
+                    <DataGridTextColumn Binding="{Binding Weight}" Header="Масса, кг" IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- 
+            <Grid Canvas.Left="30" Canvas.Top="30">
+                <Rectangle x:Name="slot" Height="80" Width="160" Stroke="Black" Fill="LightGray" AllowDrop="True" Drop="slot_Drop">
+                </Rectangle>
+                <TextBlock Width="160" Text="test" TextAlignment="Center" VerticalAlignment="Center"></TextBlock>
+            </Grid>
+            -->
+        </Canvas>
+    </DockPanel>
+
+</Window>
